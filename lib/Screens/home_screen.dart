@@ -18,8 +18,14 @@ class HomeScreen extends StatelessWidget {
           )
         ),
         child: Wrap(
+          runSpacing: 20,
+          spacing: 20,
           children: <Widget>[
-            infoCard(),
+            infoCard(title: "Total Cases",iconColor: Color(0xFFFF9C00),effectedNum: 1024,),
+            infoCard(title: "Total Deaths",iconColor: Color(0xFFFF2D55),effectedNum: 75,),
+            infoCard(title: "Total Recovered",iconColor: Color(0xFF50E3C2),effectedNum: 689,),
+            infoCard(title: "Total Deaths",iconColor: Color(0xFF5856D6),effectedNum: 75,),
+
           ],
         ),
       ),
@@ -28,77 +34,94 @@ class HomeScreen extends StatelessWidget {
 }
 
 class infoCard extends StatelessWidget {
-  String title;
-  
+  final String title;
+  final int effectedNum;
+  final Color iconColor;
+
+  infoCard({this.title, this.iconColor, this.effectedNum});
+
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 200,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(8)
-      ),
-      child: Column(
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Row(
+    return LayoutBuilder(
+        builder: (context, constraints) {
+          return Container(
+            width: constraints.maxWidth/2-10,
+            decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(8)
+            ),
+            child: Column(
               children: <Widget>[
-                Container(
-                  alignment: Alignment.center,
-                  height: 30,
-                  width: 30,
-                  decoration: BoxDecoration(
-                    color: Color(0xFFFF9C00).withOpacity(0.12),
-                    shape: BoxShape.circle,
-                  ),
-                  child: SvgPicture.asset("assets/icons/running.svg",
-                  height: 12,
-                  width: 12,),
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Row(
+                    children: <Widget>[
+                      Container(
+                        alignment: Alignment.center,
+                        height: 30,
+                        width: 30,
+                        decoration: BoxDecoration(
+                          color: iconColor.withOpacity(0.12),
+                          shape: BoxShape.circle,
+                        ),
+                        child: SvgPicture.asset("assets/icons/running.svg",
+                          height: 12,
+                          width: 12,
+                        color: iconColor,),
 
+                      ),
+                      SizedBox(width: 5),
+                      Text(
+                        title,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      )
+                    ],
+                  ),
                 ),
-                SizedBox(width: 5),
-                Text(
-                  "Confirmed Cases",
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 10.0),
+                  child: Row(
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: RichText(
+                          text: TextSpan(
+                              style: TextStyle(color: ktextColor),
+                              children: [
+                                TextSpan(
+                                    text: "${effectedNum}\n",
+                                    style: Theme
+                                        .of(context)
+                                        .textTheme
+                                        .headline6
+                                        .copyWith(fontWeight: FontWeight.bold)
+                                ),
+                                TextSpan(
+                                    text: "People",
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      height: 2,
+
+                                    )
+                                )
+                              ]
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: LineReportChart(),
+                      ),
+
+                    ],
+                  ),
                 )
               ],
             ),
-          ),
-          Row(
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: RichText(
-                  text: TextSpan(
-                    style:TextStyle(color: ktextColor),
-                    children: [
-                      TextSpan(
-                          text: "1,062\n",
-                        style: Theme.of(context).textTheme.headline6.copyWith(fontWeight: FontWeight.bold)
-                      ),
-                      TextSpan(
-                        text:"People",
-                        style: TextStyle(
-                          fontSize: 12,
-                          height: 2,
+          );
+        }
 
-                        )
-                      )
-                    ]
-                  ),
-                ),
-              ),
-              Expanded(
-                child: LineReportChart(),
-              ),
-
-            ],
-          )
-        ],
-      ),
     );
   }
 }
