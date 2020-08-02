@@ -28,21 +28,77 @@ class DetailsPage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  builTitleScreenWithMoreIcon(),
-                  SizedBox(height: 15,),
-                  buildCaseNumber(),
-                  SizedBox(height: 15,),
-                  Text("From Health Center",
-                  style: TextStyle(
-                    fontWeight: FontWeight.w200,
-                    color: ktextMediumColor,
-                    fontSize: 16
+                  BuildTitleScreenWithMoreIcon(),
+                  SizedBox(
+                    height: 15,
                   ),
+                  BuildCaseNumber(),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  Text(
+                    "From Health Center",
+                    style: TextStyle(
+                        fontWeight: FontWeight.w200,
+                        color: ktextMediumColor,
+                        fontSize: 16),
                   ),
                   WeeklyChart(),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      BuildInfoWithPercentage(
+                        percentage: "6.45%",
+                        status: "From Last Week",
+                      ),
+                      BuildInfoWithPercentage(
+                        percentage: "9.43%",
+                        status: "Recovery Rate",
+                      ),
+                    ],
+                  )
                 ],
               ),
             ),
+            SizedBox(
+              height: 15,
+            ),
+            Container(
+              padding: EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: [
+                    BoxShadow(
+                      offset: Offset(0, 21),
+                      blurRadius: 54,
+                      color: Colors.black.withOpacity(0.05),
+                    )
+                  ]),
+              child: Column(
+                children: <Widget>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text(
+                        "Global Map",
+                        style: TextStyle(
+                          fontSize: 15,
+                        ),
+                      ),
+                      SvgPicture.asset("assets/icons/more.svg")
+                    ],
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  SvgPicture.asset("assets/icons/map.svg")
+                ],
+              ),
+            )
           ],
         ),
       ),
@@ -50,11 +106,31 @@ class DetailsPage extends StatelessWidget {
   }
 }
 
-class buildCaseNumber extends StatelessWidget {
-  const buildCaseNumber({
-    Key key,
-  }) : super(key: key);
+class BuildInfoWithPercentage extends StatelessWidget {
+  final String percentage;
+  final String status;
+  BuildInfoWithPercentage({this.status, this.percentage});
+  @override
+  Widget build(BuildContext context) {
+    return RichText(
+        text: TextSpan(children: [
+      TextSpan(
+          text: "${percentage}\n",
+          style: TextStyle(
+            fontSize: 20,
+            color: kprimaryColor,
+          )),
+      TextSpan(
+          text: "${status}",
+          style: TextStyle(
+            color: ktextMediumColor,
+            height: 1.5,
+          ))
+    ]));
+  }
+}
 
+class BuildCaseNumber extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -66,17 +142,17 @@ class buildCaseNumber extends StatelessWidget {
               .headline2
               .copyWith(color: kprimaryColor, height: 1.2),
         ),
-        Text("+5.9%",
-        style: TextStyle(color: kprimaryColor),),
-
-
+        Text(
+          "+5.9%",
+          style: TextStyle(color: kprimaryColor),
+        ),
       ],
     );
   }
 }
 
-class builTitleScreenWithMoreIcon extends StatelessWidget {
-  const builTitleScreenWithMoreIcon({
+class BuildTitleScreenWithMoreIcon extends StatelessWidget {
+  const BuildTitleScreenWithMoreIcon({
     Key key,
   }) : super(key: key);
 
