@@ -4,11 +4,17 @@ import "package:covid_19_ui/constants.dart";
 import 'package:covid_19_ui/widgets/infoCards.dart';
 import 'package:covid_19_ui/widgets/PreventionCard.dart';
 import 'package:covid_19_ui/Screens/DetailsPage.dart';
+import 'package:intl/intl.dart';
+import 'package:country_list_pick/country_list_pick.dart';
 class HomeScreen extends StatelessWidget {
+  final f = new NumberFormat.compact();
+  final data;
+  HomeScreen({this.data});
 
   @override
 
   Widget build(BuildContext context) {
+
     void onTap(){
       Navigator.push(
         context,
@@ -34,10 +40,10 @@ class HomeScreen extends StatelessWidget {
               runSpacing: 20,
               spacing: 20,
               children: <Widget>[
-                infoCard(onTap:onTap,title: "Total Cases",iconColor: Color(0xFFFF9C00),effectedNum: 1024,),
-                infoCard(onTap:onTap,title: "Total Deaths",iconColor: Color(0xFFFF2D55),effectedNum: 75,),
-                infoCard(onTap:onTap,title: "Total Recovered",iconColor: Color(0xFF50E3C2),effectedNum: 689,),
-                infoCard(onTap:onTap,title: "New Cases",iconColor: Color(0xFF5856D6),effectedNum: 75,),
+                infoCard(onTap:onTap,title: "Total Cases",iconColor: Color(0xFFFF9C00),effectedNum:f.format((data["cases"])),),
+                infoCard(onTap:onTap,title: "Total Deaths",iconColor: Color(0xFFFF2D55),effectedNum: f.format((data["deaths"])),),
+                infoCard(onTap:onTap,title: "Total Recovered",iconColor: Color(0xFF50E3C2),effectedNum: f.format((data["recovered"])),),
+                infoCard(onTap:onTap,title: "New Cases",iconColor: Color(0xFF5856D6),effectedNum: f.format((data["todayCases"])),),
 
               ],
             ),
@@ -124,10 +130,36 @@ AppBar buildAppBar(Function onTap){
       onPressed: onTap,
     ),
     actions: <Widget>[
-      IconButton(
-        icon:SvgPicture.asset("assets/icons/search.svg"),
-        onPressed: (){},
-      )
+
+
+
+       CountryListPick(
+  // to show or hide flag
+            isShowFlag: false,
+            // true to show  title country
+            isShowTitle: true,
+            // true to show code phone country
+            isShowCode: false,
+            // to show or hide down icon
+            isDownIcon: false,
+            // to show country in English
+            showEnglishName: true,
+            // to initial code number countrey
+            initialSelection: '+91',
+            // to get feedback data from picker
+            onChanged: (CountryCode code) {
+            // name of country
+            print(code.name);
+            // code of country
+            print(code.code);
+            // code phone of country
+            print(code.dialCode);
+            // path flag of country
+            print(code.flagUri);
+            },
+            )
+
+
     ],
   );
 }
