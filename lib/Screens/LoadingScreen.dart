@@ -9,7 +9,7 @@ class LoadingScreen extends StatefulWidget {
 }
 
 class _LoadingScreenState extends State<LoadingScreen> {
-  CaseModel model=CaseModel();
+  CaseModel model=CaseModel(countryCode: "IND");
 
   @override
   void initState() {

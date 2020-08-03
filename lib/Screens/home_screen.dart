@@ -6,14 +6,38 @@ import 'package:covid_19_ui/widgets/PreventionCard.dart';
 import 'package:covid_19_ui/Screens/DetailsPage.dart';
 import 'package:intl/intl.dart';
 import 'package:country_list_pick/country_list_pick.dart';
-class HomeScreen extends StatelessWidget {
-  final f = new NumberFormat.compact();
+import 'package:covid_19_ui/Utilities/CaseModel.dart';
+class HomeScreen extends StatefulWidget {
   final data;
   HomeScreen({this.data});
 
   @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  int totalCases;
+  int recovered;
+  int deaths;
+  int newCases;
+  final f = new NumberFormat.compact();
+  void updateUI(data){
+    setState(() {
+      totalCases=data["cases"];
+      recovered=data["recovered"];
+      deaths=data["deaths"];
+      newCases=data["todayCases"];
+    });
+  }
+  @override
+  void initState() {
+    // TODO: implement initState
+    updateUI(widget.data);
+  }
+  @override
 
   Widget build(BuildContext context) {
+
 
     void onTap(){
       Navigator.push(
@@ -22,7 +46,7 @@ class HomeScreen extends StatelessWidget {
       );
     }
     return Scaffold(
-      appBar: buildAppBar(onTap),
+      appBar: buildAppBar(onTap,updateUI),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -40,10 +64,10 @@ class HomeScreen extends StatelessWidget {
               runSpacing: 20,
               spacing: 20,
               children: <Widget>[
-                infoCard(onTap:onTap,title: "Total Cases",iconColor: Color(0xFFFF9C00),effectedNum:f.format((data["cases"])),),
-                infoCard(onTap:onTap,title: "Total Deaths",iconColor: Color(0xFFFF2D55),effectedNum: f.format((data["deaths"])),),
-                infoCard(onTap:onTap,title: "Total Recovered",iconColor: Color(0xFF50E3C2),effectedNum: f.format((data["recovered"])),),
-                infoCard(onTap:onTap,title: "New Cases",iconColor: Color(0xFF5856D6),effectedNum: f.format((data["todayCases"])),),
+                infoCard(onTap:onTap,title: "Total Cases",iconColor: Color(0xFFFF9C00),effectedNum:f.format(totalCases),),
+                infoCard(onTap:onTap,title: "Total Deaths",iconColor: Color(0xFFFF2D55),effectedNum: f.format(deaths),),
+                infoCard(onTap:onTap,title: "Total Recovered",iconColor: Color(0xFF50E3C2),effectedNum: f.format(recovered),),
+                infoCard(onTap:onTap,title: "New Cases",iconColor: Color(0xFF5856D6),effectedNum: f.format(newCases),),
 
               ],
             ),
@@ -120,7 +144,7 @@ class HomeScreen extends StatelessWidget {
 
 
 
-AppBar buildAppBar(Function onTap){
+AppBar buildAppBar(Function onTap,Function onPressed){
   return AppBar(
     backgroundColor: kprimaryColor.withOpacity(0.03),
     elevation: 0,
@@ -140,22 +164,18 @@ AppBar buildAppBar(Function onTap){
             isShowTitle: true,
             // true to show code phone country
             isShowCode: false,
-            // to show or hide down icon
+
             isDownIcon: false,
-            // to show country in English
+
             showEnglishName: true,
-            // to initial code number countrey
+
             initialSelection: '+91',
-            // to get feedback data from picker
-            onChanged: (CountryCode code) {
-            // name of country
-            print(code.name);
-            // code of country
-            print(code.code);
-            // code phone of country
-            print(code.dialCode);
-            // path flag of country
-            print(code.flagUri);
+
+            onChanged: (CountryCode code) async{
+
+              CaseModel model=CaseModel(countryCode: code.code);
+              var data=await model.getWorldWidedata();
+              onPressed(data);
             },
             )
 
