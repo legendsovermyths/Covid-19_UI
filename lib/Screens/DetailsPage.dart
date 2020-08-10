@@ -3,21 +3,28 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:covid_19_ui/widgets/WeeklyChart.dart';
+import 'package:intl/intl.dart';
 
 class DetailsPage extends StatefulWidget {
+  final detailsData;
+  final newCases;
+  DetailsPage({this.detailsData,this.newCases});
 
-
-
-  
   @override
   _DetailsPageState createState() => _DetailsPageState();
 }
 
 class _DetailsPageState extends State<DetailsPage> {
+  final f = new NumberFormat.compact();
+  void printData(){
+    print(widget.detailsData['timeline']['cases']);
+  }
+
   @override
+
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: buildAppbar(context),
+      appBar: buildAppbar(context,printData),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 20),
         child: Column(
@@ -41,7 +48,7 @@ class _DetailsPageState extends State<DetailsPage> {
                   SizedBox(
                     height: 15,
                   ),
-                  BuildCaseNumber(),
+                  BuildCaseNumber(newCases: f.format(widget.newCases),),
                   SizedBox(
                     height: 15,
                   ),
@@ -52,7 +59,7 @@ class _DetailsPageState extends State<DetailsPage> {
                         color: ktextMediumColor,
                         fontSize: 16),
                   ),
-                  WeeklyChart(),
+                  WeeklyChart(weeklyData:widget.detailsData['timeline']['cases']),
                   SizedBox(
                     height: 10,
                   ),
@@ -140,21 +147,20 @@ class BuildInfoWithPercentage extends StatelessWidget {
 }
 
 class BuildCaseNumber extends StatelessWidget {
+  final newCases;
+  BuildCaseNumber({this.newCases});
   @override
   Widget build(BuildContext context) {
     return Row(
       children: <Widget>[
         Text(
-          "547 ",
+          newCases,
           style: Theme.of(context)
               .textTheme
               .headline2
               .copyWith(color: kprimaryColor, height: 1.2),
         ),
-        Text(
-          "+5.9%",
-          style: TextStyle(color: kprimaryColor),
-        ),
+
       ],
     );
   }
@@ -184,7 +190,7 @@ class BuildTitleScreenWithMoreIcon extends StatelessWidget {
   }
 }
 
-AppBar buildAppbar(BuildContext context) {
+AppBar buildAppbar(BuildContext context,Function printdata) {
   return AppBar(
     elevation: 0,
     backgroundColor: kbackgroundColor,
@@ -192,6 +198,7 @@ AppBar buildAppbar(BuildContext context) {
       icon: Icon(Icons.arrow_back_ios),
       color: kprimaryColor,
       onPressed: () {
+
         Navigator.pop(context);
       },
     ),
@@ -200,7 +207,7 @@ AppBar buildAppbar(BuildContext context) {
         icon: SvgPicture.asset(
           "assets/icons/search.svg",
         ),
-        onPressed: () {},
+        onPressed:printdata,
       )
     ],
   );

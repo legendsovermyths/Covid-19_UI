@@ -1,9 +1,26 @@
 import 'package:covid_19_ui/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:intl/intl.dart';
+
 class WeeklyChart extends StatelessWidget {
+  final weeklyData;
+  WeeklyChart({this.weeklyData});
+  var f= new DateFormat.yMd();
+  var curd=new DateTime.now();
+  List dialyData=[];
+  List getDialyData(){
+    for(var i=0;i<7;i++){
+      var m=f.format(curd);
+      dialyData.add(weeklyData[m.substring(0,6)+"20"]);
+    }
+    return dialyData;
+
+  }
+
   @override
   Widget build(BuildContext context) {
+
     return AspectRatio(
       aspectRatio: 1.7,
       child: BarChart(
@@ -30,6 +47,7 @@ class WeeklyChart extends StatelessWidget {
   }
 }
 getBarGroups(){
+
   List<double> barChartDatas=[6000, 10000, 8000, 7000, 10000, 15000, 9000];
   List<BarChartGroupData> barChartGroups=[];
   barChartDatas.asMap().forEach(

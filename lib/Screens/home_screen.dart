@@ -9,7 +9,8 @@ import 'package:country_list_pick/country_list_pick.dart';
 import 'package:covid_19_ui/Utilities/CaseModel.dart';
 class HomeScreen extends StatefulWidget {
   final data;
-  HomeScreen({this.data});
+  final detailsData;
+  HomeScreen({this.data,this.detailsData});
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -42,7 +43,7 @@ class _HomeScreenState extends State<HomeScreen> {
     void onTap(){
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => DetailsPage()),
+        MaterialPageRoute(builder: (context) => DetailsPage(detailsData: widget.detailsData,newCases: newCases,)),
       );
     }
     return Scaffold(

@@ -10,16 +10,18 @@ class LoadingScreen extends StatefulWidget {
 
 class _LoadingScreenState extends State<LoadingScreen> {
   CaseModel model=CaseModel(countryCode: "IND");
-
+  var detailsData;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     getWorldWideData();
   }
+
   void getWorldWideData()async{
+    var detailsData=await model.getDetailsPageData();
     var data=await model.getWorldWidedata();
-    Navigator.push(context, MaterialPageRoute(builder: (context){return HomeScreen(data:data,);}));
+    Navigator.push(context, MaterialPageRoute(builder: (context){return HomeScreen(data:data,detailsData: detailsData,);}));
   }
   @override
   Widget build(BuildContext context) {
