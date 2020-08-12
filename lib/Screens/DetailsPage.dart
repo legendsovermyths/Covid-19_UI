@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:covid_19_ui/widgets/WeeklyChart.dart';
 import 'package:intl/intl.dart';
 
+
 class DetailsPage extends StatefulWidget {
   final detailsData;
   final newCases;

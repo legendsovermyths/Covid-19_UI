@@ -2,19 +2,26 @@ import 'package:covid_19_ui/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:intl/intl.dart';
+import 'package:quartet/quartet.dart';
 
 class WeeklyChart extends StatelessWidget {
   final weeklyData;
   WeeklyChart({this.weeklyData});
   var f= new DateFormat.yMd();
   var curd=new DateTime.now();
+
   List dialyData=[];
-  List getDialyData(){
+  List<dynamic> getDialyData(){
     for(var i=0;i<7;i++){
-      var m=f.format(curd);
-      dialyData.add(weeklyData[m.substring(0,6)+"20"]);
-    }
-    return dialyData;
+
+      var k=curd.subtract(new Duration(days: i+1));
+      var m=f.format(k);
+      print(slice(m,0,-2));
+      dialyData.add(weeklyData[slice(m,0,-2)]);
+      print(dialyData);
+      }
+    var listDouble = dialyData.map((i) => i.toDouble()).toList();
+    return listDouble;
 
   }
 
@@ -25,7 +32,7 @@ class WeeklyChart extends StatelessWidget {
       aspectRatio: 1.7,
       child: BarChart(
         BarChartData(
-          barGroups: getBarGroups(),
+          barGroups: getBarGroups(getDialyData),
           borderData: FlBorderData(show: false),
           titlesData: FlTitlesData(
             leftTitles: SideTitles(
@@ -46,9 +53,9 @@ class WeeklyChart extends StatelessWidget {
     );
   }
 }
-getBarGroups(){
+getBarGroups(Function getDialyData){
 
-  List<double> barChartDatas=[6000, 10000, 8000, 7000, 10000, 15000, 9000];
+  List<dynamic> barChartDatas=getDialyData();
   List<BarChartGroupData> barChartGroups=[];
   barChartDatas.asMap().forEach(
       (i,value)=>barChartGroups.add(
@@ -84,3 +91,4 @@ String getWeek(double value) {
       return "SUN";
   }
 }
+
